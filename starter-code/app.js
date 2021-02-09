@@ -8,16 +8,20 @@ const hbs          = require('hbs');
 const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
+const helpers      = require('handlebars-helpers');
 
+hbs.registerHelper(helpers());
 
-mongoose
-  .connect('mongodb://localhost/starter-code', {useNewUrlParser: true})
-  .then(x => {
-    console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
-  })
-  .catch(err => {
-    console.error('Error connecting to mongo', err)
-  });
+//custom helper to see if the value of a property name is inside an array of objects
+//use from movies views
+hbs.registerHelper('ifIn', function(name, arr, options) {
+  if(arr.find(elem => elem.name === name)) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
+require('./configs/db.config');
 
 const app_name = require('./package.json').name;
 const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);
@@ -47,12 +51,15 @@ app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 
 // default value for title local
-app.locals.title = 'Express - Generated with IronGenerator';
-
-
+app.locals.title = 'Muviez';
 
 const index = require('./routes/index');
 app.use('/', index);
 
+const celebrity = require('./routes/celebrities');
+app.use('/', celebrity);
+
+const movie = require('./routes/movies');
+app.use('/', movie);
 
 module.exports = app;

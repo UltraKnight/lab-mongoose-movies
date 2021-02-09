@@ -1,0 +1,9 @@
+<h2>{{movie.title}}'s details</h2>
+<p>Genre: {{movie.genre}}</p>
+<p>Plot: {{movie.plot}}</p>
+<h3>Actors in this movie</h3>
+<ul>
+    {{#each movie.actors}}
+        <li style="list-style: none;">{{name}}</li>
+    {{/each}}
+</ul>

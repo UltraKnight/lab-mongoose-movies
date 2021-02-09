@@ -1,0 +1,39 @@
+<h2>Update Movie</h2>
+<form action="/movies/{{movie.id}}" method="POST">
+    <div>
+        <label for="movie">Title</label>
+        <input type="text" name="title" id="movie" value="{{movie.title}}">
+    </div>
+    <br>
+    <div>
+        <label for="genre">Genre</label>
+        <input type="text" name="genre" id="genre" value="{{movie.genre}}">
+    </div>
+    <br>
+    <div>
+        <label for="plot">Plot</label>
+        <textarea name="plot" id="plot" cols="30" rows="3">{{movie.plot}}</textarea>
+    </div>
+    <div>
+        <label style="display: block;" for="actors">Celebrities in this movie</label>
+        <select name="actors" id="actors" multiple>
+            <option value="" disabled>Select your celebrities</option>
+                {{#if movie.actors.length}} {{!--makes the comparison if the movie.actors is not empty--}}
+                    {{#each actors}}
+                        {{!-- if name is found in movie.actors array--}}
+                        {{#ifIn name ../movie.actors}}
+                            <option value="{{id}}" selected>{{name}}</option>
+                        {{else}}
+                            <option value="{{id}}">{{name}}</option>
+                        {{/ifIn}}
+                    {{/each}}
+                {{else}}
+                    {{#each actors}}
+                        <option value="{{id}}">{{name}}</option>
+                    {{/each}}
+                {{/if}}
+        </select>
+    </div>
+    <br>
+    <button type="submit">Update Movie</button>
+</form>
